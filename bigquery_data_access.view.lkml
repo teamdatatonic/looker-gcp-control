@@ -16,7 +16,7 @@ view: bigquery_data_access {
 
   dimension: log_name {
     type: string
-    sql: ${TABLE}.logName ;;
+    sql: ${TABLE}.logName;;
   }
 
   dimension: operation {

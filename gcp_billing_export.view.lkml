@@ -1,10 +1,11 @@
 view: gcp_billing_export {
   sql_table_name: gcp_logs.gcp_billing_export_002831_A42942_C36931 ;;
 
-  filter: date_view {
+  parameter: date_view {
     type: string
     suggestions: ["Year","Month","Week","Day"]
   }
+
 
   dimension: billing_date {
     sql: CASE
