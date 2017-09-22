@@ -2,18 +2,25 @@ view: gcp_billing_export {
   sql_table_name: gcp_logs.gcp_billing_export_002831_A42942_C36931 ;;
 
   parameter: date_view {
-    type: string
-    suggestions: ["Year","Month","Week","Day"]
+    type: unquoted
+    default_value: "Day"
+    allowed_value: {
+      label: "Year"
+      value: "YEAR"
+    }
+    allowed_value: {
+      label: "Month"
+      value: "MONTH"
+    }
+    allowed_value: {
+      label: "Day"
+      value: "DATE"
+    }
   }
 
-
   dimension: billing_date {
-    sql: CASE
-          WHEN {% parameter date_view %} = 'Year' THEN ${end_year}
-          WHEN {% parameter date_view %} = 'Month' THEN ${end_month}
-          WHEN {% parameter date_view %} = 'Week' THEN ${end_week}
-          ELSE ${end_date}
-        END;;
+    type: string
+    sql: EXTRACT({% parameter date_view %} from ${start_raw}) ;;
   }
 
   dimension: billing_account_id {
@@ -34,10 +41,12 @@ view: gcp_billing_export {
             <a href="{{ link }}"> £{{ rendered_value }}</a>
           {% elsif currency == 'USD' %}
             <a href="{{ link }}"> ${{ rendered_value }}</a>
+          {% elsif currency == 'EUR' %}
+            <a href="{{ link }}"> €{{ rendered_value }}</a>
           {% else %}
-            <a href="{{ link }}"> {{ rendered_value }}</a>
-          {% endif %};;
-    drill_fields: [gcp_billing_export_project.name, product, resource_type, total_cost]
+            <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
+          {% endif %} ;;
+    drill_fields: [gcp_billing_export_project.name, product, resource_type, gcp_billing_export_usage.resource, gcp_billing_export_usage.total_usage, total_cost]
   }
 
   dimension: credits {
@@ -108,11 +117,6 @@ view: gcp_billing_export {
     hidden: yes
     sql: ${TABLE}.usage ;;
   }
-
-  measure: count {
-    type: count
-    drill_fields: []
-  }
 }
 
 view: gcp_billing_export_credits {
@@ -128,12 +132,18 @@ view: gcp_billing_export_credits {
 }
 
 view: gcp_billing_export_usage {
-  dimension: amount {
+  dimension: usage {
     type: number
     sql: ${TABLE}.amount ;;
   }
 
-  dimension: unit {
+  measure: total_usage {
+    description: "The units of Usage is the dimension 'Resource', please use the two together"
+    type: sum
+    sql: ${usage} ;;
+  }
+
+  dimension: resource {
     type: string
     sql: ${TABLE}.unit ;;
   }

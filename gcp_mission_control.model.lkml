@@ -9,22 +9,22 @@ explore: bigquery_data_access {
 
   always_filter: {
     filters: {
-      field: bigquery_data_access_protopayload_auditlog.service_name
+      field: bigquery_data_access_payload.service_name
       value: "bigquery.googleapis.com"
     }
     filters: {
-      field: bigquery_data_access_protopayload_auditlog.method_name
+      field: bigquery_data_access_payload.method_name
       value: "jobservice.jobcompleted"
     }
     filters: {
-      field: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event.event_name
+      field: bigquery_data_access_job_completed_event.event_name
       value: "query_job_completed"
     }
   }
 
-  join: bigquery_data_access_protopayload_auditlog {
+  join: bigquery_data_access_payload {
     view_label: "BigQuery Data Access"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access.protopayload_auditlog}]) as bigquery_data_access_protopayload_auditlog ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access.protopayload_auditlog}]) as bigquery_data_access_payload ;;
     relationship: one_to_one
   }
 
@@ -40,63 +40,63 @@ explore: bigquery_data_access {
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery {
+  join: bigquery_data_access_servicedata {
     view_label: "BigQuery Data Access: Service Data"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog.servicedata_v1_bigquery}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_payload.servicedata_v1_bigquery}]) AS bigquery_data_access_servicedata;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event {
+  join: bigquery_data_access_job_completed_event {
     view_label: "BigQuery Data Access: Query Data"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery.job_completed_event}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_servicedata.job_completed_event}]) AS bigquery_data_access_job_completed_event ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job {
+  join: bigquery_data_access_job {
     view_label: "BigQuery Data Access: Query Data"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event.job}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job_completed_event.job}]) AS bigquery_data_access_job ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_statistics {
+  join: bigquery_data_access_job_statistics {
     view_label: "BigQuery Data Access: Query Statistics"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job.job_statistics}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_statistics ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job.job_statistics}]) AS bigquery_data_access_job_statistics ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration {
+  join: bigquery_data_access_job_configuration {
     view_label: "BigQuery Data Access: Config"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job.job_configuration}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job.job_configuration}]) AS bigquery_data_access_job_configuration ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query {
+  join: bigquery_data_access_query {
     view_label: "BigQuery Data Access: Query"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration.query}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job_configuration.query}]) AS bigquery_data_access_query ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query_destination_table {
+  join: bigquery_data_access_query_destination_table {
     view_label: "BigQuery Data Access: Query"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query.destination_table}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query_destination_table ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_query.destination_table}]) AS bigquery_data_access_query_destination_table ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status {
+  join: bigquery_data_access_job_status {
     view_label: "BigQuery Data Access: Status"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job.job_status}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job.job_status}]) AS bigquery_data_access_job_status ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status_error {
+  join: bigquery_data_access_job_status_error {
     view_label: "BigQuery Data Access: Status"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status.error}]) AS bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status_error ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_job_status.error}]) AS bigquery_data_access_job_status_error ;;
     relationship: one_to_one
   }
 
-  join: bigquery_data_access_protopayload_auditlog_authentication_info {
+  join: bigquery_data_access_authentication_info {
     view_label: "BigQuery Data Access"
-    sql: LEFT JOIN UNNEST([${bigquery_data_access_protopayload_auditlog.authentication_info}]) AS bigquery_data_access_protopayload_auditlog_authentication_info ;;
+    sql: LEFT JOIN UNNEST([${bigquery_data_access_payload.authentication_info}]) AS bigquery_data_access_authentication_info ;;
     relationship: one_to_one
   }
 }
@@ -112,7 +112,7 @@ explore: gcp_billing_export {
   }
 
   join: gcp_billing_export_usage {
-    view_label: "GCP Usage"
+    view_label: "GCP Resource Usage"
     sql: LEFT JOIN UNNEST([${gcp_billing_export.usage}]) AS gcp_billing_export_usage ;;
     relationship: one_to_one
   }

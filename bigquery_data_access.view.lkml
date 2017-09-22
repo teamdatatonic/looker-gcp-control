@@ -222,7 +222,7 @@ view: bigquery_data_access_operation {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_request_metadata {
+view: bigquery_data_access_request_metadata {
   dimension: caller_ip {
     type: string
     sql: ${TABLE}.callerIp ;;
@@ -234,7 +234,7 @@ view: bigquery_data_access_protopayload_auditlog_request_metadata {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_authentication_info {
+view: bigquery_data_access_authentication_info {
   dimension: authority_selector {
     hidden: yes
     type: string
@@ -248,7 +248,7 @@ view: bigquery_data_access_protopayload_auditlog_authentication_info {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_authorization_info {
+view: bigquery_data_authorization_info {
   dimension: granted {
     type: yesno
     sql: ${TABLE}.granted ;;
@@ -265,7 +265,7 @@ view: bigquery_data_access_protopayload_auditlog_authorization_info {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog {
+view: bigquery_data_access_payload {
   dimension: authentication_info {
     hidden: yes
     sql: ${TABLE}.authenticationInfo ;;
@@ -312,380 +312,7 @@ view: bigquery_data_access_protopayload_auditlog {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response {
-  dimension: job {
-    hidden: yes
-    sql: ${TABLE}.job ;;
-  }
-
-  dimension: total_results {
-    type: number
-    sql: ${TABLE}.totalResults ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_name {
-  dimension: job_id {
-    type: string
-    sql: ${TABLE}.jobId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_status {
-  dimension: error {
-    hidden: yes
-    sql: ${TABLE}.error ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_status_error {
-  dimension: code {
-    type: number
-    sql: ${TABLE}.code ;;
-  }
-
-  dimension: message {
-    type: string
-    sql: ${TABLE}.message ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_statistics {
-  dimension: billing_tier {
-    type: number
-    sql: ${TABLE}.billingTier ;;
-  }
-
-  dimension_group: create {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.createTime ;;
-  }
-
-  dimension_group: end {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.endTime ;;
-  }
-
-  dimension_group: start {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.startTime ;;
-  }
-
-  dimension: billed_bytes {
-    type: number
-    sql: ${TABLE}.totalBilledBytes ;;
-  }
-
-  dimension: billed_gigabytes {
-    type: number
-    sql: 1.0*${billed_bytes}/1000000000 ;;
-  }
-
-  dimension: billed_terabytes {
-    type: number
-    sql: 1.0*${billed_bytes}/1000000000000 ;;
-  }
-
-  dimension: query_cost {
-    type: number
-    sql: 5.0*${billed_bytes}/1000000000000 ;;
-    value_format_name: usd
-  }
-
-  measure: total_query_cost {
-    type: sum
-    sql: ${query_cost} ;;
-    value_format_name: usd
-  }
-
-  measure: average_query_cost {
-    type: average
-    sql: ${query_cost} ;;
-    value_format_name: usd
-  }
-
-#   dimension: total_processed_bytes {
-#     type: number
-#     sql: ${TABLE}.totalProcessedBytes ;;
-#   }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_configuration {
-  dimension: dry_run {
-    type: yesno
-    sql: ${TABLE}.dryRun ;;
-  }
-
-  dimension: query {
-    hidden: yes
-    sql: ${TABLE}.query ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_configuration_query_destination_table {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-
-  dimension: table_id {
-    type: string
-    sql: ${TABLE}.tableId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_configuration_query_table_definitions {
-  dimension: name {
-    type: string
-    sql: ${TABLE}.name ;;
-  }
-
-  dimension: source_uris {
-    type: string
-    sql: ${TABLE}.sourceUris ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_configuration_query {
-  dimension: create_disposition {
-    type: string
-    sql: ${TABLE}.createDisposition ;;
-  }
-
-  dimension: default_dataset {
-    hidden: yes
-    sql: ${TABLE}.defaultDataset ;;
-  }
-
-  dimension: destination_table {
-    hidden: yes
-    sql: ${TABLE}.destinationTable ;;
-  }
-
-  dimension: query {
-    type: string
-    sql: ${TABLE}.query ;;
-  }
-
-  dimension: table_definitions {
-    hidden: yes
-    sql: ${TABLE}.tableDefinitions ;;
-  }
-
-  dimension: write_disposition {
-    type: string
-    sql: ${TABLE}.writeDisposition ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job_job_configuration_query_default_dataset {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response {
-  dimension: job {
-    hidden: yes
-    sql: ${TABLE}.job ;;
-  }
-
-  dimension: total_results {
-    type: number
-    sql: ${TABLE}.totalResults ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job_job_name {
-  dimension: job_id {
-    type: string
-    sql: ${TABLE}.jobId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job_job_status {
-  dimension: error {
-    hidden: yes
-    sql: ${TABLE}.error ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job_job_status_error {
-  dimension: code {
-    type: number
-    sql: ${TABLE}.code ;;
-  }
-
-  dimension: message {
-    type: string
-    sql: ${TABLE}.message ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job_job_statistics {
-  dimension: billing_tier {
-    type: number
-    sql: ${TABLE}.billingTier ;;
-  }
-
-  dimension_group: create {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.createTime ;;
-  }
-
-  dimension_group: end {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.endTime ;;
-  }
-
-  dimension_group: start {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.startTime ;;
-  }
-
-  dimension: total_billed_bytes {
-    type: number
-    sql: ${TABLE}.totalBilledBytes ;;
-  }
-
-  dimension: total_processed_bytes {
-    type: number
-    sql: ${TABLE}.totalProcessedBytes ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job_job_configuration {
-  dimension: dry_run {
-    type: yesno
-    sql: ${TABLE}.dryRun ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_request {
-  dimension: default_dataset {
-    hidden: yes
-    sql: ${TABLE}.defaultDataset ;;
-  }
-
-  dimension: dry_run {
-    type: yesno
-    sql: ${TABLE}.dryRun ;;
-  }
-
-  dimension: max_results {
-    type: number
-    sql: ${TABLE}.maxResults ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-
-  dimension: query {
-    type: string
-    sql: ${TABLE}.query ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_request_default_dataset {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_request {
+view: bigquery_data_access_table_data_list_request {
   dimension: max_results {
     type: number
     sql: ${TABLE}.maxResults ;;
@@ -697,379 +324,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_name {
-  dimension: job_id {
-    type: string
-    sql: ${TABLE}.jobId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_status {
-  dimension: error {
-    hidden: yes
-    sql: ${TABLE}.error ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_status_error {
-  dimension: code {
-    type: number
-    sql: ${TABLE}.code ;;
-  }
-
-  dimension: message {
-    type: string
-    sql: ${TABLE}.message ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_statistics {
-  dimension: billing_tier {
-    type: number
-    sql: ${TABLE}.billingTier ;;
-  }
-
-  dimension_group: create {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.createTime ;;
-  }
-
-  dimension_group: end {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.endTime ;;
-  }
-
-  dimension_group: start {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.startTime ;;
-  }
-
-  dimension: total_billed_bytes {
-    type: number
-    sql: ${TABLE}.totalBilledBytes ;;
-  }
-
-  dimension: total_processed_bytes {
-    type: number
-    sql: ${TABLE}.totalProcessedBytes ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_configuration {
-  dimension: dry_run {
-    type: yesno
-    sql: ${TABLE}.dryRun ;;
-  }
-
-  dimension: query {
-    hidden: yes
-    sql: ${TABLE}.query ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_configuration_query_destination_table {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-
-  dimension: table_id {
-    type: string
-    sql: ${TABLE}.tableId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_configuration_query_table_definitions {
-  dimension: name {
-    type: string
-    sql: ${TABLE}.name ;;
-  }
-
-  dimension: source_uris {
-    type: string
-    sql: ${TABLE}.sourceUris ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_configuration_query {
-  dimension: create_disposition {
-    type: string
-    sql: ${TABLE}.createDisposition ;;
-  }
-
-  dimension: default_dataset {
-    hidden: yes
-    sql: ${TABLE}.defaultDataset ;;
-  }
-
-  dimension: destination_table {
-    hidden: yes
-    sql: ${TABLE}.destinationTable ;;
-  }
-
-  dimension: query {
-    type: string
-    sql: ${TABLE}.query ;;
-  }
-
-  dimension: table_definitions {
-    hidden: yes
-    sql: ${TABLE}.tableDefinitions ;;
-  }
-
-  dimension: write_disposition {
-    type: string
-    sql: ${TABLE}.writeDisposition ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource_job_configuration_query_default_dataset {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_name {
-  dimension: job_id {
-    type: string
-    sql: ${TABLE}.jobId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_status {
-  dimension: error {
-    hidden: yes
-    sql: ${TABLE}.error ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_status_error {
-  dimension: code {
-    type: number
-    sql: ${TABLE}.code ;;
-  }
-
-  dimension: message {
-    type: string
-    sql: ${TABLE}.message ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_statistics {
-  dimension: billing_tier {
-    type: number
-    sql: ${TABLE}.billingTier ;;
-  }
-
-  dimension_group: create {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.createTime ;;
-  }
-
-  dimension_group: end {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.endTime ;;
-  }
-
-  dimension_group: start {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.startTime ;;
-  }
-
-  dimension: total_billed_bytes {
-    type: number
-    sql: ${TABLE}.totalBilledBytes ;;
-  }
-
-  dimension: total_processed_bytes {
-    type: number
-    sql: ${TABLE}.totalProcessedBytes ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_configuration {
-  dimension: dry_run {
-    type: yesno
-    sql: ${TABLE}.dryRun ;;
-  }
-
-  dimension: query {
-    hidden: yes
-    sql: ${TABLE}.query ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_configuration_query_destination_table {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-
-  dimension: table_id {
-    type: string
-    sql: ${TABLE}.tableId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_configuration_query_table_definitions {
-  dimension: name {
-    type: string
-    sql: ${TABLE}.name ;;
-  }
-
-  dimension: source_uris {
-    type: string
-    sql: ${TABLE}.sourceUris ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_configuration_query {
-  dimension: create_disposition {
-    type: string
-    sql: ${TABLE}.createDisposition ;;
-  }
-
-  dimension: default_dataset {
-    hidden: yes
-    sql: ${TABLE}.defaultDataset ;;
-  }
-
-  dimension: destination_table {
-    hidden: yes
-    sql: ${TABLE}.destinationTable ;;
-  }
-
-  dimension: query {
-    type: string
-    sql: ${TABLE}.query ;;
-  }
-
-  dimension: table_definitions {
-    hidden: yes
-    sql: ${TABLE}.tableDefinitions ;;
-  }
-
-  dimension: write_disposition {
-    type: string
-    sql: ${TABLE}.writeDisposition ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource_job_configuration_query_default_dataset {
-  dimension: dataset_id {
-    type: string
-    sql: ${TABLE}.datasetId ;;
-  }
-
-  dimension: project_id {
-    type: string
-    sql: ${TABLE}.projectId ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_table_data_list_request {
-  dimension: max_results {
-    type: number
-    sql: ${TABLE}.maxResults ;;
-  }
-
-  dimension: start_row {
-    type: number
-    sql: ${TABLE}.startRow ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event {
+view: bigquery_data_access_job_completed_event {
   dimension: event_name {
     type: string
     sql: ${TABLE}.eventName ;;
@@ -1081,7 +336,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_name {
+view: bigquery_data_access_job_name {
   dimension: job_id {
     type: string
     sql: ${TABLE}.jobId ;;
@@ -1093,7 +348,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status {
+view: bigquery_data_access_job_status {
   dimension: error {
     hidden: yes
     sql: ${TABLE}.error ;;
@@ -1110,7 +365,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
 }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_status_error {
+view: bigquery_data_access_job_status_error {
   dimension: code {
     type: number
     sql: ${TABLE}.code ;;
@@ -1123,7 +378,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
 
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_statistics {
+view: bigquery_data_access_job_statistics {
   dimension: billing_tier {
     type: number
     sql: ${TABLE}.billingTier ;;
@@ -1250,7 +505,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration {
+view: bigquery_data_access_job_configuration {
   dimension: dry_run {
     type: yesno
     sql: ${TABLE}.dryRun ;;
@@ -1262,7 +517,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query_destination_table {
+view: bigquery_data_access_query_destination_table {
   dimension: dataset_id {
     type: string
     sql: ${TABLE}.datasetId ;;
@@ -1279,7 +534,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query_table_definitions {
+view: bigquery_data_access_query_table_definitions {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
@@ -1291,7 +546,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query {
+view: bigquery_data_access_query {
   dimension: create_disposition {
     type: string
     sql: ${TABLE}.createDisposition ;;
@@ -1323,7 +578,7 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_com
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job_job_configuration_query_default_dataset {
+view: bigquery_data_access_query_default_dataset {
   dimension: dataset_id {
     type: string
     sql: ${TABLE}.datasetId ;;
@@ -1347,7 +602,7 @@ view: bigquery_data_access_protopayload_auditlog_status {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery {
+view: bigquery_data_access_servicedata {
   dimension: job_completed_event {
     hidden: yes
     sql: ${TABLE}.jobCompletedEvent ;;
@@ -1389,7 +644,8 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery {
   }
 }
 
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get_query_results_response_job {
+
+view: bigquery_data_access_job {
   dimension: job_configuration {
     hidden: yes
     sql: ${TABLE}.jobConfiguration ;;
@@ -1408,107 +664,5 @@ view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_get
   dimension: job_status {
     hidden: yes
     sql: ${TABLE}.jobStatus ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_query_response_job {
-  dimension: job_configuration {
-    hidden: yes
-    sql: ${TABLE}.jobConfiguration ;;
-  }
-
-  dimension: job_name {
-    hidden: yes
-    sql: ${TABLE}.jobName ;;
-  }
-
-  dimension: job_statistics {
-    hidden: yes
-    sql: ${TABLE}.jobStatistics ;;
-  }
-
-  dimension: job_status {
-    hidden: yes
-    sql: ${TABLE}.jobStatus ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request_resource {
-  dimension: job_configuration {
-    hidden: yes
-    sql: ${TABLE}.jobConfiguration ;;
-  }
-
-  dimension: job_name {
-    hidden: yes
-    sql: ${TABLE}.jobName ;;
-  }
-
-  dimension: job_statistics {
-    hidden: yes
-    sql: ${TABLE}.jobStatistics ;;
-  }
-
-  dimension: job_status {
-    hidden: yes
-    sql: ${TABLE}.jobStatus ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response_resource {
-  dimension: job_configuration {
-    hidden: yes
-    sql: ${TABLE}.jobConfiguration ;;
-  }
-
-  dimension: job_name {
-    hidden: yes
-    sql: ${TABLE}.jobName ;;
-  }
-
-  dimension: job_statistics {
-    hidden: yes
-    sql: ${TABLE}.jobStatistics ;;
-  }
-
-  dimension: job_status {
-    hidden: yes
-    sql: ${TABLE}.jobStatus ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_completed_event_job {
-  dimension: job_configuration {
-    hidden: yes
-    sql: ${TABLE}.jobConfiguration ;;
-  }
-
-  dimension: job_name {
-    hidden: yes
-    sql: ${TABLE}.jobName ;;
-  }
-
-  dimension: job_statistics {
-    hidden: yes
-    sql: ${TABLE}.jobStatistics ;;
-  }
-
-  dimension: job_status {
-    hidden: yes
-    sql: ${TABLE}.jobStatus ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_request {
-  dimension: resource {
-    hidden: yes
-    sql: ${TABLE}.resource ;;
-  }
-}
-
-view: bigquery_data_access_protopayload_auditlog_servicedata_v1_bigquery_job_insert_response {
-  dimension: resource {
-    hidden: yes
-    sql: ${TABLE}.resource ;;
   }
 }
