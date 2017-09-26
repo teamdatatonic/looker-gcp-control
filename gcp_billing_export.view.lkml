@@ -86,7 +86,7 @@ view: gcp_billing_export {
   dimension: product {
     type: string
     sql: ${TABLE}.product ;;
-    drill_fields: [resource_type]
+    drill_fields: [gcp_billing_export_project.name,resource_type]
   }
 
   dimension: project {
