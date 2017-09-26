@@ -80,7 +80,33 @@ view: bigquery_data_access {
   measure: number_of_queries {
     view_label: "BigQuery Data Access: Query Statistics"
     type: count
-    drill_fields: [log_name]
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+                  , bigquery_data_access_job_statistics.start_time
+                  , bigquery_data_access_resource_labels.project_id
+                  , bigquery_data_access_query.query
+                  , bigquery_data_access_job_statistics.billed_gigabytes
+                  , bigquery_data_access_job_statistics.query_runtime
+                  , bigquery_data_access_job_statistics.query_cost
+                  , bigquery_data_access_job_status_error.code
+                  , bigquery_data_access_job_status_error.message]
+  }
+
+  measure: number_of_expensive_queries {
+    view_label: "BigQuery Data Access: Query Statistics"
+    type: count
+    filters: {
+      field: bigquery_data_access_job_statistics.billed_gigabytes
+      value: ">30"
+    }
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+                  , bigquery_data_access_job_statistics.start_time
+                  , bigquery_data_access_resource_labels.project_id
+                  , bigquery_data_access_query.query
+                  , bigquery_data_access_job_statistics.billed_gigabytes
+                  , bigquery_data_access_job_statistics.query_runtime
+                  , bigquery_data_access_job_statistics.query_cost
+                  , bigquery_data_access_job_status_error.code
+                  , bigquery_data_access_job_status_error.message]
   }
 }
 
@@ -245,6 +271,22 @@ view: bigquery_data_access_authentication_info {
     label: "User ID"
     type: string
     sql: ${TABLE}.principalEmail ;;
+  }
+
+  dimension: is_service_account {
+    type: yesno
+    sql: (${user_id} LIKE '%gserviceaccount%') ;;
+
+  }
+
+  measure: number_of_active_users {
+    description: "Excludes Service Accounts"
+    type: count_distinct
+    sql: ${user_id} ;;
+    filters: {
+      field: is_service_account
+      value: "no"
+    }
   }
 }
 
