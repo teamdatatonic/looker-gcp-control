@@ -232,7 +232,7 @@ view: gcp_billing_export_project {
     label: "Project Name"
     type: string
     sql: ${TABLE}.name ;;
-    drill_fields: [gcp_billing_export.product, gcp_billing_export.resource_type]
+    drill_fields: [gcp_billing_export.product, gcp_billing_export.resource_category, gcp_billing_export.resource_type]
   }
 }
 
