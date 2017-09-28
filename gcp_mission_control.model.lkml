@@ -106,14 +106,26 @@ explore: gcp_billing_export {
   label: "GCP Billing"
 
   join: gcp_billing_export_project {
-    view_label: "GCP Project"
+    view_label: "GCP Billing"
     sql: LEFT JOIN UNNEST([${gcp_billing_export.project}]) AS gcp_billing_export_project ;;
     relationship: one_to_one
   }
 
+  join: gcp_billing_export_labels {
+    view_label: "GCP Billing"
+    relationship: one_to_many
+    sql: LEFT JOIN UNNEST(project.labels) AS gcp_billing_export_labels ;;
+  }
+
   join: gcp_billing_export_usage {
-    view_label: "GCP Resource Usage"
+    view_label: "GCP Billing"
     sql: LEFT JOIN UNNEST([${gcp_billing_export.usage}]) AS gcp_billing_export_usage ;;
     relationship: one_to_one
+  }
+
+  join: gcp_billing_export_credits {
+    view_label: "GCP Billing"
+    sql: LEFT JOIN UNNEST(credits) AS gcp_billing_export_credits ;;
+    relationship: one_to_many
   }
 }
