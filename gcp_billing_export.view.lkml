@@ -48,7 +48,7 @@ view: gcp_billing_export {
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
           {% endif %} ;;
-    drill_fields: [gcp_billing_export_project.name, product, resource_type, gcp_billing_export_usage.resource, gcp_billing_export_usage.total_usage, total_cost]
+    drill_fields: [gcp_billing_export_project.name, product, resource_category, resource_type, gcp_billing_export_usage.unit, gcp_billing_export_usage.total_usage, total_cost]
   }
 
   dimension: credits {
