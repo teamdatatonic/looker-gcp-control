@@ -46,3 +46,12 @@ Alternatively, if you have the Google Cloud SDK installed, you can set up the Bi
 gcloud beta logging sinks create <sink_name> bigquery.googleapis.com/projects/<project-name>/datasets/<dataset-name> --log-filter='resource.type="bigquery_resource"'
 ```
 
+## Looker Configuration
+
+This block requires almost no configuration once added to your **Looker** instance. We will only need to change the billing export table name:
+
+1. Go to **BigQuery** and copy the name of the billing export table, this will start **gcp_billing_export_**
+2. In Looker, go to the view file **gcp_billing_export**
+3. Replace the table name in the **FROM** statement of the derived table with your billing export table name
+ 
+You should now be ready to start monitoring your BigQuery and GCP usage.
