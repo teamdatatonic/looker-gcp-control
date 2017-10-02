@@ -23,7 +23,7 @@ Tp set up the BigQuery log export do the following:
 
 1. Go to the Google Cloud Platform console and select **Stackdriver Logging**
 2. Click **Exports** and then **Create Export**
-3. Add a **Sink Name* and select **Custom Destination** as the **Sink Service**. The **Sink Destination** should be set to **bigquery.googleapis.com/projects/<project-name>/datasets/<dataset-name>**, adding the project and dataset names you created earlier.
+3. Add a **Sink Name** and select **Custom Destination** as the **Sink Service**. The **Sink Destination** should be set to ```bigquery.googleapis.com/projects/<project-name>/datasets/<dataset-name>```, adding the project and dataset names you created earlier.
 4. Click **Create Sink**
 
 If you got a permission error then that is perfectly normal. It is because the project you have set up the export to is different to the project you have set up the logging export in. In this case the **Service Account** which writes the logs into the **BigQuery** dataset you have created will not have permission to do so. Follow the steps below to complete the setup:
