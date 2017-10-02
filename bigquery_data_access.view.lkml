@@ -1,6 +1,16 @@
 view: bigquery_data_access {
   derived_table: {
-    sql: SELECT * FROM `gcp_logs.cloudaudit_googleapis_com_data_access_*` ;;
+    sql:
+      SELECT
+        *
+      FROM
+        `gcp_logs.cloudaudit_googleapis_com_data_access_*`
+      WHERE
+        {% condition date_filter %} PARSE_TIMESTAMP('%E4Y%m%d', _TABLE_SUFFIX) {% endcondition %} ;;
+  }
+
+  filter: date_filter {
+    type: date
   }
 
   dimension: http_request {
@@ -287,6 +297,7 @@ view: bigquery_data_access_authentication_info {
       field: is_service_account
       value: "no"
     }
+    drill_fields: [user_id]
   }
 }
 

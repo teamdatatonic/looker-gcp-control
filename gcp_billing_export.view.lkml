@@ -1,5 +1,18 @@
 view: gcp_billing_export {
-  sql_table_name: gcp_logs.gcp_billing_export_002831_A42942_C36931 ;;
+  derived_table: {
+    sql:
+      SELECT
+        *
+      FROM
+        gcp_logs.gcp_billing_export_002831_A42942_C36931
+      WHERE
+        {% condition date_filter %} _PARTITIONTIME {% endcondition %} ;;
+  }
+
+  filter: date_filter {
+    type: date
+  }
+
 
   parameter: date_view {
     type: unquoted
@@ -16,6 +29,12 @@ view: gcp_billing_export {
       label: "Day"
       value: "DATE"
     }
+  }
+
+  dimension: is_last_month {
+    type: yesno
+    sql: ${start_month_num} = EXTRACT(month from CURRENT_TIMESTAMP())-1
+          AND ${start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
   }
 
   dimension: billing_date {
