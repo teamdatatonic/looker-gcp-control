@@ -272,8 +272,8 @@
     col: 8
     width: 4
     height: 3
-  - name: Avg. Query Runtime
-    title: Avg. Query Runtime
+  - name: Avg Query Runtime
+    title: Avg Query Runtime
     model: gcp_mission_control
     explore: bigquery_data_access
     type: single_value
@@ -572,7 +572,6 @@
       User: bigquery_data_access_authentication_info.user_id
       Project: bigquery_data_access_resource_labels.project_id
       Is Service Account: bigquery_data_access_authentication_info.is_service_account
-      Date: bigquery_data_access_job_statistics.start_date
     row: 18
     col: 0
     width: 24
@@ -593,7 +592,6 @@
       bigquery_data_access_payload.method_name: jobservice.jobcompleted
       bigquery_data_access_payload.service_name: bigquery.googleapis.com
       bigquery_data_access_job_completed_event.event_name: query_job_completed
-      bigquery_data_access_job_statistics.start_date: 30 days
     sorts:
     - bigquery_data_access_job_statistics.total_query_cost desc
     limit: 500
@@ -634,7 +632,6 @@
       bigquery_data_access_payload.method_name: jobservice.jobcompleted
       bigquery_data_access_payload.service_name: bigquery.googleapis.com
       bigquery_data_access_job_completed_event.event_name: query_job_completed
-      bigquery_data_access_job_statistics.start_date: 30 days
     sorts:
     - bigquery_data_access_job_statistics.total_query_cost desc
     limit: 500
