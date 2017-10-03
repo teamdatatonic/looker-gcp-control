@@ -1,11 +1,13 @@
 # GCP Billing and BigQuery Audit
 
+
+
 ## Getting Started
 
 ### GCP Setup
 
 Create a BigQuery dataset for the billing and BigQuery audit logs. Go to the Google Cloud Platform console, and select **BigQuery**, or go to https://bigquery.cloud.google.com/. Click the drop down next to the project name and select **Create New Dataset**, set a location and click **OK**.
-*Optional:* We recommend setting up a new GCP Project, purely for this purpose
+*Optional:* We recommend setting up a new GCP Project, purely for this purpose.
 
 ### Setting up the Billing Export
 
@@ -53,5 +55,5 @@ This block requires almost no configuration once added to your **Looker** instan
 1. Go to **BigQuery** and copy the name of the billing export table, this will start **gcp_billing_export_**
 2. In Looker, go to the view file **gcp_billing_export**
 3. Replace the table name in the **FROM** statement of the derived table with your billing export table name
- 
+
 You should now be ready to start monitoring your BigQuery and GCP usage.

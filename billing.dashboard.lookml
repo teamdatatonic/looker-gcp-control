@@ -4,7 +4,7 @@
   elements:
   - name: Total Billing Last Month
     title: Total Billing Last Month
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: single_value
     fields:
@@ -39,7 +39,7 @@
     height: 6
   - name: Total Billing This Month
     title: Total Billing This Month
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: single_value
     fields:
@@ -74,7 +74,7 @@
     height: 6
   - name: Billing by Project
     title: Billing by Project
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: looker_column
     fields:
@@ -139,7 +139,7 @@
     height: 11
   - name: Billing by Product
     title: Billing by Product
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: looker_column
     fields:
@@ -204,7 +204,7 @@
     height: 11
   - name: Billing by Product This Month
     title: Billing by Product This Month
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: table
     fields:
@@ -271,7 +271,7 @@
     height: 8
   - name: Billing by Project This Month
     title: Billing by Project This Month
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: table
     fields:
@@ -339,7 +339,7 @@
     height: 8
   - title: Billing This Year
     name: Billing This Year
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: single_value
     fields:
@@ -384,7 +384,7 @@
     height: 6
   - name: Billing by Month
     title: Billing by Month
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: looker_column
     fields:
@@ -430,7 +430,7 @@
     height: 8
   - name: Predicted Total Monthly Costs
     title: Predicted Total Monthly Costs
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     type: single_value
     fields:
@@ -585,7 +585,7 @@
     title: Product
     type: field_filter
     default_value: ''
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     field: gcp_billing_export.product
     listens_to_filters: []
@@ -595,7 +595,7 @@
     title: Project
     type: field_filter
     default_value: ''
-    model: gcp_mission_control
+    model: gcp_billing
     explore: gcp_billing_export
     field: gcp_billing_export_project.name
     listens_to_filters: []

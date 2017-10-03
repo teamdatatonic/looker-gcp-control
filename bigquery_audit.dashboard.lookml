@@ -4,7 +4,7 @@
   elements:
   - name: Failed Queries
     title: Failed Queries
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -94,7 +94,7 @@
     height: 3
   - name: Data Scanned
     title: Data Scanned
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -184,7 +184,7 @@
     height: 3
   - name: Successful Queries
     title: Successful Queries
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -274,7 +274,7 @@
     height: 3
   - name: Avg Query Runtime
     title: Avg Query Runtime
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -364,7 +364,7 @@
     height: 3
   - name: Total Queries
     title: Total Queries
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: looker_line
     fields:
@@ -450,7 +450,7 @@
     height: 7
   - name: Total Cost
     title: Total Cost
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -539,7 +539,7 @@
     height: 3
   - name: Most Expensive Queries (> 30GB scanned)
     title: Most Expensive Queries (> 30GB scanned)
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: table
     fields:
@@ -578,7 +578,7 @@
     height: 8
   - name: Biggest Users
     title: Biggest Users
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: table
     fields:
@@ -618,7 +618,7 @@
     height: 8
   - name: Biggest Projects
     title: Biggest Projects
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: table
     fields:
@@ -658,7 +658,7 @@
     height: 8
   - name: Queries > 30 GB
     title: Queries > 30 GB
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: single_value
     fields:
@@ -688,7 +688,7 @@
     height: 3
   - name: Number of Active Users
     title: Number of Active Users
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     type: looker_column
     fields:
@@ -740,7 +740,7 @@
     title: Project
     type: field_filter
     default_value: ''
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     field: bigquery_data_access_resource_labels.project_id
     listens_to_filters: []
@@ -750,7 +750,7 @@
     title: User
     type: field_filter
     default_value: ''
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     field: bigquery_data_access_authentication_info.user_id
     listens_to_filters: []
@@ -760,7 +760,7 @@
     title: Is Service Account
     type: field_filter
     default_value: ''
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     field: bigquery_data_access_authentication_info.is_service_account
     listens_to_filters: []
@@ -770,7 +770,7 @@
     title: Date
     type: field_filter
     default_value: 30 days
-    model: gcp_mission_control
+    model: gcp_bigquery_logs
     explore: bigquery_data_access
     field: bigquery_data_access_job_statistics.start_date
     listens_to_filters: []
