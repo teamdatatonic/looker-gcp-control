@@ -40,6 +40,7 @@ view: bigquery_data_access {
   }
 
   dimension_group: receive_timestamp {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -69,6 +70,7 @@ view: bigquery_data_access {
   }
 
   dimension_group: timestamp {
+    hidden: yes
     type: time
     timeframes: [
       raw,
