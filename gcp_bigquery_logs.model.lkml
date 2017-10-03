@@ -1,7 +1,7 @@
-connection: "gap-demo"
+connection: "sandbox"
 
 include: "*.view.lkml"         # include all views in this project
-include: "*.dashboard.lookml"  # include all dashboards in this project
+include: "bigquery_audit.dashboard.lookml"  # include all dashboards in this project
 
 explore: bigquery_data_access {
   view_label: "BigQuery Data Access"

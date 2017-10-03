@@ -504,6 +504,15 @@ view: bigquery_data_access_job_statistics {
     view_label: "BigQuery Data Access: Query Statistics"
     sql: ${billed_gigabytes} ;;
     value_format_name: decimal_2
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   measure: total_billed_terabytes {
@@ -511,6 +520,15 @@ view: bigquery_data_access_job_statistics {
     view_label: "BigQuery Data Access: Query Statistics"
     sql: ${billed_terabytes} ;;
     value_format_name: decimal_2
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   measure: average_billed_gigabytes {
@@ -518,6 +536,15 @@ view: bigquery_data_access_job_statistics {
     view_label: "BigQuery Data Access: Query Statistics"
     sql: ${billed_gigabytes} ;;
     value_format_name: decimal_2
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   measure: average_billed_terabytes {
@@ -525,6 +552,15 @@ view: bigquery_data_access_job_statistics {
     view_label: "BigQuery Data Access: Query Statistics"
     sql: ${billed_terabytes} ;;
     value_format_name: decimal_2
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   dimension: query_cost {
@@ -537,12 +573,30 @@ view: bigquery_data_access_job_statistics {
     type: sum
     sql: ${query_cost} ;;
     value_format_name: usd
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   measure: average_query_cost {
     type: average
     sql: ${query_cost} ;;
     value_format_name: usd
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   dimension: query_runtime {
@@ -555,6 +609,15 @@ view: bigquery_data_access_job_statistics {
     type: average
     sql: ${query_runtime} ;;
     value_format_name: decimal_1
+    drill_fields: [bigquery_data_access_authentication_info.user_id
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 }
 
