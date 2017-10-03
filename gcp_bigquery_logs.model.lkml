@@ -103,5 +103,6 @@ explore: bigquery_data_access {
   join: bigquery_data_access_http_request {
     view_label: "BigQuery Data Access: Request"
     sql: LEFT JOIN UNNEST([${bigquery_data_access.http_request}]) AS bigquery_data_access_http_request ;;
+    relationship: one_to_one
   }
 }
