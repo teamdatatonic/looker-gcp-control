@@ -2,9 +2,10 @@ view: gcp_billing_export {
   derived_table: {
     sql:
       SELECT
-        *
+        *,
+        ROW_NUMBER() OVER () pk
       FROM
-        gcp_logs.gcp_billing_export_002831_A42942_C36931
+        gcp_logs.gcp_billing_export_v1_002831_A42942_C36931
       WHERE
         {% condition date_filter %} _PARTITIONTIME {% endcondition %} ;;
   }
@@ -33,13 +34,14 @@ view: gcp_billing_export {
 
   dimension: is_last_month {
     type: yesno
-    sql: ${start_month_num} = EXTRACT(month from CURRENT_TIMESTAMP())-1
-          AND ${start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
+    sql: ${usage_start_month_num} = EXTRACT(month from CURRENT_TIMESTAMP())-1
+          AND ${usage_start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
   }
 
   dimension: billing_date {
     type: string
-    sql: EXTRACT({% parameter date_view %} from ${start_raw}) ;;
+    label_from_parameter: date_view
+    sql: EXTRACT({% parameter date_view %} from ${usage_start_raw}) ;;
   }
 
   dimension: billing_account_id {
@@ -48,13 +50,13 @@ view: gcp_billing_export {
   }
 
   dimension: cost {
-    description: "The cost associated to a Resource, between Start Date and End Date"
+    description: "The cost associated to an SKU, between Start Date and End Date"
     type: number
     sql: ${TABLE}.cost ;;
   }
 
   measure: total_cost {
-    description: "The total cost associated to the Resource, between the Start Date and End Date"
+    description: "The total cost associated to the SKU, between the Start Date and End Date"
     type: sum
     sql: ${TABLE}.cost ;;
     value_format_name: decimal_2
@@ -67,12 +69,29 @@ view: gcp_billing_export {
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
           {% endif %} ;;
-    drill_fields: [gcp_billing_export_project.name, product, resource_category, resource_type, gcp_billing_export_usage.unit, gcp_billing_export_usage.total_usage, total_cost]
+    drill_fields: [gcp_billing_export_project.name, gcp_billing_export_service.description, sku_category, gcp_billing_export_sku.description, gcp_billing_export_usage.unit, gcp_billing_export_usage.total_usage, total_cost]
   }
 
   dimension: credits {
     hidden: yes
     sql: ${TABLE}.credits ;;
+  }
+
+  measure: total_credit {
+    description: "The total credit given to the billing account"
+    type: number
+    sql: ${gcp_billing_export_credits.credit_amount} ;;
+    value_format_name: decimal_2
+    html: {% if currency._value == 'GBP' %}
+            <a href="{{ link }}"> £{{ rendered_value }}</a>
+          {% elsif currency == 'USD' %}
+            <a href="{{ link }}"> ${{ rendered_value }}</a>
+          {% elsif currency == 'EUR' %}
+            <a href="{{ link }}"> €{{ rendered_value }}</a>
+          {% else %}
+            <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
+          {% endif %} ;;
+    drill_fields: [gcp_billing_export_credits.credit_name,gcp_billing_export_credits.credit_amount]
   }
 
   dimension: currency {
@@ -86,8 +105,8 @@ view: gcp_billing_export {
     sql: ${TABLE}.currency_conversion_rate ;;
   }
 
-  dimension_group: end {
-    description: "Time at which the cost associated with a resource ended"
+  dimension_group: export {
+    description: "Time at which the billing was exported"
     type: time
     timeframes: [
       raw,
@@ -102,7 +121,7 @@ view: gcp_billing_export {
       quarter,
       year
     ]
-    sql: ${TABLE}.end_time ;;
+    sql: ${TABLE}.export_time ;;
   }
 
   dimension: labels {
@@ -110,50 +129,51 @@ view: gcp_billing_export {
     sql: ${TABLE}.labels ;;
   }
 
-  dimension: product {
-    description: "The GCP Product, e.g. BigQuery, Dataflow, App Engine"
+  dimension: pk {
     type: string
-    sql: ${TABLE}.product ;;
-    drill_fields: [gcp_billing_export_project.name,resource_category,resource_type]
+    primary_key: yes
+    hidden: yes
+    # sql: CONCAT(${billing_account_id},CAST(${usage_start_raw} as STRING),${gcp_billing_export_service.id}, ${gcp_billing_export_sku.id}) ;;
+    sql: ${TABLE}.pk ;;
   }
 
-  dimension: resource_category {
+  dimension: sku_category {
     type: string
-    description: "Provides an additional layer of granularity above Resource type."
-    drill_fields: [resource_type]
+    description: "Provides an additional layer of granularity above SKU"
+    drill_fields: [gcp_billing_export_sku.description]
     sql:
       CASE
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%Licensing%') THEN 'Compute Engine License'
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%Network%') THEN 'Networking'
-        WHEN (${product} = "Compute Engine"
-              AND (${resource_type} LIKE '%instance%'
-                  or ${resource_type} LIKE '%Instance%')) THEN 'Compute Engine Instance'
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%PD%') THEN 'Compute Engine Storage'
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%Intel%') THEN 'Compute Engine Instance'
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%Storage%') THEN 'Compute Engine Storage'
-        WHEN (${product} = "Compute Engine"
-              AND ${resource_type} LIKE '%Ip%') THEN 'Networking'
-        WHEN (${product} = "BigQuery"
-              AND ${resource_type} LIKE '%Storage%') THEN 'BigQuery Storage'
-        WHEN (${product} = "BigQuery"
-              AND ${resource_type} = "Analysis") THEN 'BigQuery Analysis'
-        WHEN (${product} = "BigQuery"
-              AND ${resource_type} = 'Streaming Insert') THEN 'BigQuery Streaming'
-        WHEN (${product} = 'Cloud Storage'
-              AND ${resource_type} LIKE '%Storage%') THEN 'GCS Storage'
-        WHEN (${product} = 'Cloud Storage'
-              AND ${resource_type} LIKE '%Download%') THEN 'GCS Download'
-        WHEN (${product} = 'Cloud Dataflow'
-              AND ${resource_type} LIKE '%PD%') THEN 'Dataflow PD'
-        WHEN (${product} = 'Cloud Dataflow'
-              AND (${resource_type} LIKE '%vCPU%'
-                    OR ${resource_type} LIKE '%RAM%')) THEN 'Dataflow Compute'
-        ELSE ${product}
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%Licensing%') THEN 'Compute Engine License'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%Network%') THEN 'Networking'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND (${gcp_billing_export_sku.description} LIKE '%instance%'
+                  or ${gcp_billing_export_sku.description} LIKE '%Instance%')) THEN 'Compute Engine Instance'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%PD%') THEN 'Compute Engine Storage'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%Intel%') THEN 'Compute Engine Instance'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%Storage%') THEN 'Compute Engine Storage'
+        WHEN (${gcp_billing_export_service.description} = "Compute Engine"
+              AND ${gcp_billing_export_sku.description} LIKE '%Ip%') THEN 'Networking'
+        WHEN (${gcp_billing_export_service.description} = "BigQuery"
+              AND ${gcp_billing_export_sku.description} LIKE '%Storage%') THEN 'BigQuery Storage'
+        WHEN (${gcp_billing_export_service.description} = "BigQuery"
+              AND ${gcp_billing_export_sku.description} = "Analysis") THEN 'BigQuery Analysis'
+        WHEN (${gcp_billing_export_service.description} = "BigQuery"
+              AND ${gcp_billing_export_sku.description} = 'Streaming Insert') THEN 'BigQuery Streaming'
+        WHEN (${gcp_billing_export_service.description} = 'Cloud Storage'
+              AND ${gcp_billing_export_sku.description} LIKE '%Storage%') THEN 'GCS Storage'
+        WHEN (${gcp_billing_export_service.description} = 'Cloud Storage'
+              AND ${gcp_billing_export_sku.description} LIKE '%Download%') THEN 'GCS Download'
+        WHEN (${gcp_billing_export_service.description} = 'Cloud Dataflow'
+              AND ${gcp_billing_export_sku.description} LIKE '%PD%') THEN 'Dataflow PD'
+        WHEN (${gcp_billing_export_service.description} = 'Cloud Dataflow'
+              AND (${gcp_billing_export_sku.description} LIKE '%vCPU%'
+                    OR ${gcp_billing_export_sku.description} LIKE '%RAM%')) THEN 'Dataflow Compute'
+        ELSE ${gcp_billing_export_service.description}
       END  ;;
   }
 
@@ -162,14 +182,18 @@ view: gcp_billing_export {
     sql: ${TABLE}.project ;;
   }
 
-  dimension: resource_type {
-    description: "The most granular level of detail"
-    type: string
-    sql: ${TABLE}.resource_type ;;
+  dimension: service {
+    hidden: yes
+    sql: ${TABLE}.service ;;
   }
 
-  dimension_group: start {
-    description: "Time at which the cost associated with a resource started"
+  dimension: sku {
+    hidden: yes
+    sql: ${TABLE}.sku ;;
+  }
+
+  dimension_group: usage_end {
+    description: "Time at which the cost associated with a SKU ended"
     type: time
     timeframes: [
       raw,
@@ -184,12 +208,37 @@ view: gcp_billing_export {
       quarter,
       year
     ]
-    sql: ${TABLE}.start_time ;;
+    sql: ${TABLE}.usage_end_time ;;
+  }
+
+  dimension_group: usage_start {
+    description: "Time at which the cost associated with a SKU started"
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      month_name,
+      month_num,
+      week_of_year,
+      day_of_month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.usage_start_time ;;
   }
 
   dimension: usage {
     hidden: yes
     sql: ${TABLE}.usage ;;
+  }
+
+  measure: total_usage {
+    description: "The units of Usage is the dimension 'Resource', please use the two together"
+    type: sum
+    sql: ${gcp_billing_export_usage.usage} ;;
   }
 }
 
@@ -201,17 +250,16 @@ view: gcp_billing_export_credits {
     sql: ${TABLE}.amount ;;
   }
 
-  measure: total_credit {
-    description: "The total credit given to the billing account"
-    type: number
-    sql: ${credit_amount} ;;
-  }
-
   dimension: credit_name {
     group_label: "Credits"
     description: "Nmae of the credit applied to account"
     type: string
     sql: ${TABLE}.name ;;
+  }
+
+  dimension: credit_id {
+    primary_key: yes
+    sql: CONCAT(${gcp_billing_export.pk}, ${credit_name} ;;
   }
 }
 
@@ -222,14 +270,9 @@ view: gcp_billing_export_usage {
     sql: ${TABLE}.amount ;;
   }
 
-  measure: total_usage {
-    description: "The units of Usage is the dimension 'Resource', please use the two together"
-    type: sum
-    sql: ${usage} ;;
-  }
-
   dimension: unit {
     group_label: "Resource Usage"
+    label: "Resource"
     type: string
     sql: ${TABLE}.unit ;;
   }
@@ -250,8 +293,8 @@ view: gcp_billing_export_project {
   dimension: name {
     label: "Project Name"
     type: string
-    sql: ${TABLE}.name ;;
-    drill_fields: [gcp_billing_export.product, gcp_billing_export.resource_category, gcp_billing_export.resource_type]
+    sql: ${TABLE}.name;;
+    drill_fields: [gcp_billing_export_service.description, gcp_billing_export.sku_category, gcp_billing_export_sku.description]
   }
 }
 
@@ -266,5 +309,41 @@ view: gcp_billing_export_labels {
     group_label: "Labels"
     type: string
     sql: ${TABLE}.value ;;
+  }
+
+  dimension: label_id {
+    primary_key: yes
+    hidden: yes
+    sql: CONCAT(${gcp_billing_export.pk}, ${label_key}, ${label_value}) ;;
+  }
+}
+
+view: gcp_billing_export_service {
+  dimension: id {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.id ;;
+  }
+
+  dimension: description {
+    label: "Service"
+    type: string
+    sql: ${TABLE}.description ;;
+    drill_fields: [gcp_billing_export_project.name, gcp_billing_export.sku_category, gcp_billing_export_sku.description]
+  }
+}
+
+view: gcp_billing_export_sku {
+  dimension: id {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.id ;;
+  }
+
+  dimension: description {
+    label: "SKU"
+    description: "The most granular level of detail"
+    type: string
+    sql: ${TABLE}.description ;;
   }
 }
