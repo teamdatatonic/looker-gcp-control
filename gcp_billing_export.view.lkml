@@ -5,7 +5,7 @@ view: gcp_billing_export {
         *,
         ROW_NUMBER() OVER () pk
       FROM
-        gcp_logs.gcp_billing_export_v1_002831_A42942_C36931
+        gcp_logs.gcp_billing_export_v1_#####_#####_######
       WHERE
         {% condition date_filter %} _PARTITIONTIME {% endcondition %} ;;
   }
