@@ -79,7 +79,7 @@ view: gcp_billing_export {
 
   measure: total_credit {
     description: "The total credit given to the billing account"
-    type: number
+    type: sum
     sql: ${gcp_billing_export_credits.credit_amount} ;;
     value_format_name: decimal_2
     html: {% if currency._value == 'GBP' %}
@@ -259,7 +259,8 @@ view: gcp_billing_export_credits {
 
   dimension: credit_id {
     primary_key: yes
-    sql: CONCAT(${gcp_billing_export.pk}, ${credit_name} ;;
+#     hidden: yes
+    sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${credit_name}) ;;
   }
 }
 
@@ -314,7 +315,7 @@ view: gcp_billing_export_labels {
   dimension: label_id {
     primary_key: yes
     hidden: yes
-    sql: CONCAT(${gcp_billing_export.pk}, ${label_key}, ${label_value}) ;;
+    sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${label_key}, ${label_value}) ;;
   }
 }
 
