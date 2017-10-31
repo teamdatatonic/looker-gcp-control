@@ -30,4 +30,16 @@ explore: gcp_billing_export {
     sql: LEFT JOIN UNNEST(credits) AS gcp_billing_export_credits ;;
     relationship: one_to_many
   }
+
+  join: gcp_billing_export_service {
+    view_label: "GCP Billing"
+    relationship: one_to_one
+    sql: LEFT JOIN UNNEST([${gcp_billing_export.service}]) AS gcp_billing_export_service ;;
+  }
+
+  join: gcp_billing_export_sku {
+    view_label: "GCP Billing"
+    relationship: one_to_one
+    sql: LEFT JOIN UNNEST([${gcp_billing_export.sku}]) AS gcp_billing_export_sku ;;
+  }
 }

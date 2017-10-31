@@ -1,6 +1,10 @@
 # GCP Billing and BigQuery Audit
 
+<<<<<<< HEAD
 This repository contains two Looker blocks for analysing **Google Cloud Platform logs**. We provide a Looker model called **GCP Billing** which sits on top of GCP billing log exports. This model allows you to analyse billing data across projects and across products and resource types, allowing you to efficiently manage you GCP Billing account. We also provide projected monthly spend based on your current daily billing, so you can take actions to control spending across your organisation.
+=======
+This repository contains two Looker blocks for analysing **Google Cloud Platform logs**. We provide a Looker model called **GCP Billing** which sits on top of GCP billing log exports. This model allows you to analyse billing data across projects and across services and resource types, allowing you to efficiently manage you GCP Billing account. We also provide projected monthly spend based on your current daily billing, so you can take actions to control spending across your organisation.
+>>>>>>> d99db96021abf1add723a86b4a4ab82a8ec1f68a
 
 We also provide a model to anlayse **BigQuery data access logs**. The model sits on top of a Stackdriver Logging export of BigQuery queries and data access. This allows you to effectively monitor BigQuery performance and cost at a per user level. It can be used to set up alerts to long running or high cost queries. Below we also detail a method to analyse these logs across several projects, allowing you to visualise your BigQuery organisation in one place.
 
@@ -26,6 +30,11 @@ To setup a billing export to BigQuery do the following:
 
 Billing data will now be exported to your dataset at regular intervals. The Billing export table is date partitioned, and will incur a small data storage charge.
 
+<<<<<<< HEAD
+=======
+    Note: Recently the GCP Billing Export moved from Beta to v1. If you activated the billing export before the change, then there will be two tables in your export dataset. This model sits on top of the new v1 table, as the old table will soon be deprecated.
+
+>>>>>>> d99db96021abf1add723a86b4a4ab82a8ec1f68a
 ### Setting up BigQuery audit logs export
 
 To set up the BigQuery log export do the following in a project that contains BigQuery:

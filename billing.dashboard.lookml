@@ -32,7 +32,7 @@
     show_comparison_label: true
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 0
     col: 12
     width: 6
@@ -45,7 +45,7 @@
     fields:
     - gcp_billing_export.total_cost
     filters:
-      gcp_billing_export.end_date: 1 months
+      gcp_billing_export.usage_start_date: 1 months
     sorts:
     - gcp_billing_export.total_cost desc
     limit: 500
@@ -67,7 +67,7 @@
     show_comparison_label: true
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 0
     col: 0
     width: 6
@@ -80,13 +80,13 @@
     fields:
     - gcp_billing_export_project.name
     - gcp_billing_export.total_cost
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     pivots:
     - gcp_billing_export_project.name
     fill_fields:
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     filters:
-      gcp_billing_export.start_date: 30 days
+      gcp_billing_export.usage_start_date: 30 days
     sorts:
     - gcp_billing_export.total_cost desc 0
     - gcp_billing_export_project.name
@@ -132,29 +132,29 @@
     series_colors: {}
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 6
     col: 0
     width: 12
     height: 11
-  - name: Billing by Product
-    title: Billing by Product
+  - name: Billing by Service
+    title: Billing by Service
     model: gcp_billing
     explore: gcp_billing_export
     type: looker_column
     fields:
-    - gcp_billing_export.product
+    - gcp_billing_export_service.description
     - gcp_billing_export.total_cost
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     pivots:
-    - gcp_billing_export.product
+    - gcp_billing_export_service.description
     fill_fields:
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     filters:
-      gcp_billing_export.start_date: 30 days
+      gcp_billing_export.usage_start_date: 30 days
     sorts:
     - gcp_billing_export.total_cost desc 0
-    - gcp_billing_export.product
+    - gcp_billing_export_service.description
     limit: 500
     column_limit: 50
     stacking: percent
@@ -197,21 +197,21 @@
     column_group_spacing_ratio:
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 6
     col: 12
     width: 12
     height: 11
-  - name: Billing by Product This Month
-    title: Billing by Product This Month
+  - name: Billing by Service This Month
+    title: Billing by Service This Month
     model: gcp_billing
     explore: gcp_billing_export
     type: table
     fields:
     - gcp_billing_export.total_cost
-    - gcp_billing_export.product
+    - gcp_billing_export_service.description
     filters:
-      gcp_billing_export.end_date: 1 months
+      gcp_billing_export.usage_start_date: 1 months
     sorts:
     - gcp_billing_export.total_cost desc
     limit: 500
@@ -264,7 +264,7 @@
     series_colors: {}
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 17
     col: 12
     width: 12
@@ -278,7 +278,7 @@
     - gcp_billing_export_project.name
     - gcp_billing_export.total_cost
     filters:
-      gcp_billing_export.end_date: 1 months
+      gcp_billing_export.usage_start_date: 1 months
     sorts:
     - gcp_billing_export.total_cost desc
     - gcp_billing_export_project.name
@@ -332,7 +332,7 @@
     series_colors: {}
     listen:
       Project: gcp_billing_export_project.name
-      Product: gcp_billing_export.product
+      Service: gcp_billing_export_service.description
     row: 17
     col: 0
     width: 12
@@ -345,7 +345,7 @@
     fields:
     - gcp_billing_export.total_cost
     filters:
-      gcp_billing_export.start_year: 1 years
+      gcp_billing_export.usage_start_year: 1 years
     limit: 500
     column_limit: 50
     custom_color_enabled: false
@@ -382,6 +382,9 @@
     col: 18
     width: 6
     height: 6
+    listen:
+      Project: gcp_billing_export_project.name
+      Service: gcp_billing_export_service.description
   - name: Billing by Month
     title: Billing by Month
     model: gcp_billing
@@ -389,13 +392,13 @@
     type: looker_column
     fields:
     - gcp_billing_export.total_cost
-    - gcp_billing_export.start_month
+    - gcp_billing_export.usage_start_month
     fill_fields:
-    - gcp_billing_export.start_month
+    - gcp_billing_export.usage_start_month
     filters:
-      gcp_billing_export.start_date: 12 months
+      gcp_billing_export.usage_start_date: 12 months
     sorts:
-    - gcp_billing_export.start_month desc
+    - gcp_billing_export.usage_start_month desc
     limit: 500
     column_limit: 50
     stacking: ''
@@ -428,22 +431,25 @@
     col: 0
     width: 24
     height: 8
+    listen:
+      Project: gcp_billing_export_project.name
+      Service: gcp_billing_export_service.description
   - name: Predicted Total Monthly Costs
     title: Predicted Total Monthly Costs
     model: gcp_billing
     explore: gcp_billing_export
     type: single_value
     fields:
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     - gcp_billing_export.total_cost
     fill_fields:
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     filters:
-      gcp_billing_export.product: ''
+      gcp_billing_export_service.description: ''
       gcp_billing_export_project.name: ''
-      gcp_billing_export.start_date: 1 months
+      gcp_billing_export.usage_start_date: 1 months
     sorts:
-    - gcp_billing_export.start_date
+    - gcp_billing_export.usage_start_date
     limit: 500
     column_limit: 50
     dynamic_fields:
@@ -505,7 +511,7 @@
       _type_hint: number
     - table_calculation: predicted_cumulative_cost
       label: Predicted Cumulative Cost
-      expression: running_total(if(extract_days(${gcp_billing_export.start_date})>
+      expression: running_total(if(extract_days(${gcp_billing_export.usage_start_date})>
         extract_days(now()),${predicted_cost},${gcp_billing_export.total_cost}))
       value_format:
       value_format_name:
@@ -513,7 +519,7 @@
       _type_hint: number
     - table_calculation: day
       label: Day
-      expression: extract_days(${gcp_billing_export.start_date})
+      expression: extract_days(${gcp_billing_export.usage_start_date})
       value_format:
       value_format_name:
       _kind_hint: dimension
@@ -580,14 +586,17 @@
     col: 6
     width: 6
     height: 6
+    listen:
+      Project: gcp_billing_export_project.name
+      Service: gcp_billing_export_service.description
   filters:
-  - name: Product
-    title: Product
+  - name: Service
+    title: Service
     type: field_filter
     default_value: ''
     model: gcp_billing
     explore: gcp_billing_export
-    field: gcp_billing_export.product
+    field: gcp_billing_export_service.description
     listens_to_filters: []
     allow_multiple_values: true
     required: false
