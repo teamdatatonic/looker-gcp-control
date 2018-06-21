@@ -418,6 +418,7 @@ view: bigquery_data_access_job_status {
     type: yesno
     sql: ${error} IS NOT NULL ;;
   }
+
 }
 
 view: bigquery_data_access_job_status_error {

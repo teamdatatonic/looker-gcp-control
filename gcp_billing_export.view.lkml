@@ -36,6 +36,7 @@ view: gcp_billing_export {
     type: yesno
     sql: ${usage_start_month_num} = EXTRACT(month from CURRENT_TIMESTAMP())-1
       AND ${usage_start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
+
   }
 
   dimension: billing_date {
