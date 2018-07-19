@@ -1,5 +1,5 @@
-- dashboard: billing
-  title: Billing
+  dashboard: billing
+  title: GCP Billing
   layout: newspaper
   elements:
   - name: Total Billing Last Month
@@ -337,8 +337,8 @@
     col: 0
     width: 12
     height: 8
-  - title: Billing This Year
-    name: Billing This Year
+  - name: Billing This Year
+    title: Billing This Year
     model: gcp_billing
     explore: gcp_billing_export
     type: single_value
@@ -590,7 +590,7 @@
       Project: gcp_billing_export_project.name
       Service: gcp_billing_export_service.description
   filters:
-  - name: Service
+    name: Service
     title: Service
     type: field_filter
     default_value: ''
@@ -600,7 +600,7 @@
     listens_to_filters: []
     allow_multiple_values: true
     required: false
-  - name: Project
+    name: Project
     title: Project
     type: field_filter
     default_value: ''
