@@ -4,7 +4,7 @@ view: bigquery_data_access {
       SELECT
         *
       FROM
-        `gcp_logs.cloudaudit_googleapis_com_data_access_*`
+        `bq_metrics.cloudaudit_googleapis_com_data_access_*`
       WHERE
         {% condition date_filter %} PARSE_TIMESTAMP('%E4Y%m%d', _TABLE_SUFFIX) {% endcondition %} ;;
   }
@@ -93,14 +93,14 @@ view: bigquery_data_access {
     view_label: "BigQuery Data Access: Query Statistics"
     type: count
     drill_fields: [bigquery_data_access_authentication_info.user_id
-                  , bigquery_data_access_job_statistics.start_time
-                  , bigquery_data_access_resource_labels.project_id
-                  , bigquery_data_access_query.query
-                  , bigquery_data_access_job_statistics.billed_gigabytes
-                  , bigquery_data_access_job_statistics.query_runtime
-                  , bigquery_data_access_job_statistics.query_cost
-                  , bigquery_data_access_job_status_error.code
-                  , bigquery_data_access_job_status_error.message]
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 
   measure: number_of_expensive_queries {
@@ -111,14 +111,14 @@ view: bigquery_data_access {
       value: ">30"
     }
     drill_fields: [bigquery_data_access_authentication_info.user_id
-                  , bigquery_data_access_job_statistics.start_time
-                  , bigquery_data_access_resource_labels.project_id
-                  , bigquery_data_access_query.query
-                  , bigquery_data_access_job_statistics.billed_gigabytes
-                  , bigquery_data_access_job_statistics.query_runtime
-                  , bigquery_data_access_job_statistics.query_cost
-                  , bigquery_data_access_job_status_error.code
-                  , bigquery_data_access_job_status_error.message]
+      , bigquery_data_access_job_statistics.start_time
+      , bigquery_data_access_resource_labels.project_id
+      , bigquery_data_access_query.query
+      , bigquery_data_access_job_statistics.billed_gigabytes
+      , bigquery_data_access_job_statistics.query_runtime
+      , bigquery_data_access_job_statistics.query_cost
+      , bigquery_data_access_job_status_error.code
+      , bigquery_data_access_job_status_error.message]
   }
 }
 
@@ -417,7 +417,8 @@ view: bigquery_data_access_job_status {
   dimension: query_failed {
     type: yesno
     sql: ${error} IS NOT NULL ;;
-}
+  }
+
 }
 
 view: bigquery_data_access_job_status_error {

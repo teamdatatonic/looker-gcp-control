@@ -5,7 +5,7 @@ view: gcp_billing_export {
         *,
         ROW_NUMBER() OVER () pk
       FROM
-        gcp_logs.gcp_billing_export_v1_#####_#####_######
+        `bq_metrics.gcp_billing_export_v1_*`
       WHERE
         {% condition date_filter %} _PARTITIONTIME {% endcondition %} ;;
   }
@@ -35,7 +35,8 @@ view: gcp_billing_export {
   dimension: is_last_month {
     type: yesno
     sql: ${usage_start_month_num} = EXTRACT(month from CURRENT_TIMESTAMP())-1
-          AND ${usage_start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
+      AND ${usage_start_year} = EXTRACT(year from CURRENT_TIMESTAMP());;
+
   }
 
   dimension: billing_date {
