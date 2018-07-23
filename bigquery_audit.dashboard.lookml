@@ -1,4 +1,4 @@
-- dashboard: bigquery_audit
+  dashboard: bigquery_audit
   title: BigQuery Audit
   layout: newspaper
   elements:
@@ -736,7 +736,7 @@
     width: 12
     height: 7
   filters:
-  - name: Project
+    name: Project
     title: Project
     type: field_filter
     default_value: ''
@@ -746,7 +746,7 @@
     listens_to_filters: []
     allow_multiple_values: true
     required: false
-  - name: User
+    name: User
     title: User
     type: field_filter
     default_value: ''
@@ -756,7 +756,7 @@
     listens_to_filters: []
     allow_multiple_values: true
     required: false
-  - name: Is Service Account
+    name: Is Service Account
     title: Is Service Account
     type: field_filter
     default_value: ''
@@ -766,7 +766,7 @@
     listens_to_filters: []
     allow_multiple_values: true
     required: false
-  - name: Date
+    name: Date
     title: Date
     type: field_filter
     default_value: 30 days
