@@ -3,7 +3,7 @@ view: gcp_billing_export {
     sql:
       SELECT
         *,
-        ROW_NUMBER() OVER () pk
+        GENERATE_UUID() as pk
       FROM
         gcp_logs.gcp_billing_export_v1_#####_#####_######
       WHERE
