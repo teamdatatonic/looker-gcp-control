@@ -257,11 +257,11 @@ view: gcp_billing_export_credits {
     sql: ${TABLE}.name ;;
   }
 
-  dimension: credit_id {
-    primary_key: yes
-#     hidden: yes
-    sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${credit_name}) ;;
-  }
+#   dimension: credit_id {
+#     primary_key: yes
+# #     hidden: yes
+#     sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${credit_name}) ;;
+#   }
 }
 
 view: gcp_billing_export_usage {
