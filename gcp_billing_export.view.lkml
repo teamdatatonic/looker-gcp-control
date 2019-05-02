@@ -281,21 +281,47 @@ view: gcp_billing_export_usage {
 
 view: gcp_billing_export_project {
   dimension: id {
+    group_label: "Project"
+    label: "Project ID"
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
   }
 
-  dimension: labels {
-    hidden: yes
-    sql: ${TABLE}.labels ;;
-  }
-
   dimension: name {
+    group_label: "Project"
     label: "Project Name"
     type: string
     sql: ${TABLE}.name;;
     drill_fields: [gcp_billing_export_service.description, gcp_billing_export.sku_category, gcp_billing_export_sku.description]
+  }
+  
+  dimension: folder {
+    group_label: "Project"
+    label: "Project Folder"
+    type: string
+    sql: ${TABLE}.ancestry_numbers;;
+  }
+  
+  dimension: labels {
+    hidden: yes
+    sql: ${TABLE}.labels ;;
+  }
+}
+
+view: gcp_billing_export_project_labels {
+  dimension: key {
+    label: "Key"
+    group_label: "Project Labels"
+    type: string
+    sql: ${TABLE}.key ;;
+  }
+
+  dimension: value {
+    label: "Value"
+    group_label: "Project Labels"
+    type: string
+    sql: ${TABLE}.value ;;
   }
 }
 
@@ -312,15 +338,16 @@ view: gcp_billing_export_labels {
     sql: ${TABLE}.value ;;
   }
 
-  dimension: label_id {
-    primary_key: yes
-    hidden: yes
-    sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${label_key}, ${label_value}) ;;
-  }
+#   dimension: label_id {
+#     primary_key: yes
+#     hidden: yes
+#     sql: CONCAT(CAST(${gcp_billing_export.pk} as STRING), ${label_key}, ${label_value}) ;;
+#   }
 }
 
 view: gcp_billing_export_service {
   dimension: id {
+    primary_key: yes
     hidden: yes
     type: string
     sql: ${TABLE}.id ;;
@@ -336,6 +363,8 @@ view: gcp_billing_export_service {
 
 view: gcp_billing_export_sku {
   dimension: id {
+    label: "SKU ID"
+    primary_key: yes
     hidden: yes
     type: string
     sql: ${TABLE}.id ;;
@@ -348,3 +377,56 @@ view: gcp_billing_export_sku {
     sql: ${TABLE}.description ;;
   }
 }
+
+################### Location dimensions ##############################
+dimension: location {
+    hidden: yes
+    sql: ${TABLE}.location ;;
+  }
+
+view: gcp_billing_export_location {
+  dimension: country {
+    group_label: "Location"
+    label: "Country"
+    type: string
+    map_layer_name: countries
+    sql: ${TABLE}.country ;;
+  }
+
+  dimension: location {
+    group_label: "Location"
+    label: "Location"
+    type: string
+    sql: ${TABLE}.location ;;
+  }
+
+  dimension: region {
+    group_label: "Location"
+    label: "Region"
+    type: string
+    sql: ${TABLE}.region ;;
+  }
+
+  dimension: zone {
+    group_label: "Location"
+    label: "Zone"
+    type: string
+    sql: ${TABLE}.zone ;;
+  }
+}
+
+###################### Invoice Month dimension (for invoice QA) ####################
+dimension: invoice {
+  hidden: yes
+  sql: ${TABLE}.invoice ;;
+}
+
+view: gcp_billing_export_invoice {
+  dimension: month {
+    label: "Invoice Month"
+    description: "dimension to line up costs with what you get invoiced for"
+    type: string
+    sql: ${TABLE}.month ;;
+  }
+}
+
