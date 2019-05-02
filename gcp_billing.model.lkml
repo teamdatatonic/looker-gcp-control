@@ -12,6 +12,12 @@ explore: gcp_billing_export {
     sql: LEFT JOIN UNNEST([${gcp_billing_export.project}]) AS gcp_billing_export_project ;;
     relationship: one_to_one
   }
+  
+  join: gcp_billing_export_project_labels {
+    view_label: "GCP Billing"
+    sql: LEFT JOIN UNNEST(${gcp_billing_export_project.labels}) AS gcp_billing_export_project_labels ;;
+    relationship: one_to_one
+  }
 
   join: gcp_billing_export_labels {
     view_label: "GCP Billing"
@@ -42,4 +48,17 @@ explore: gcp_billing_export {
     relationship: one_to_one
     sql: LEFT JOIN UNNEST([${gcp_billing_export.sku}]) AS gcp_billing_export_sku ;;
   }
+  
+  join: gcp_billing_export_invoice {
+    view_label: "GCP Billing"
+    relationship: one_to_one
+    sql: LEFT JOIN UNNEST([${gcp_billing_export.invoice}]) AS gcp_billing_export_invoice ;;
+  }
+  
+  join: gcp_billing_export_location {
+    view_label: "GCP Billing"
+    sql: LEFT JOIN UNNEST([${gcp_billing_export.location}]) AS gcp_billing_export_location ;;
+    relationship: one_to_one
+  }
+  
 }
