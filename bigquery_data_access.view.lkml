@@ -90,6 +90,17 @@ view: bigquery_data_access {
     sql: ${TABLE}.trace ;;
   }
 
+# warning! a MethodName filter must be applied to this measure (number_of_queries) to gain number of queries without double counting.
+# if you want the number of run queries, use jobservice.jobcompleted.
+# 1	google.cloud.bigquery.v2.JobService.GetQueryResults
+# 2	google.cloud.bigquery.v2.JobService.InsertJob
+# 3	google.cloud.bigquery.v2.TableDataService.List
+# 4	jobservice.cancel
+# 5	jobservice.getqueryresults
+# 6	jobservice.insert
+# 7	jobservice.jobcompleted
+# 8	jobservice.query
+# 9	tabledataservice.list
   measure: number_of_queries {
     view_label: "BigQuery Data Access: Query Statistics"
     type: count
