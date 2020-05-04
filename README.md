@@ -26,9 +26,6 @@ To setup a billing export to BigQuery do the following:
 
 Billing data will now be exported to your dataset at regular intervals. The Billing export table is date partitioned, and will incur a small data storage charge.
 
-
-    Note: Recently the GCP Billing Export moved from Beta to v1. If you activated the billing export before the change, then there will be two tables in your export dataset. This model sits on top of the new v1 table, as the old table will soon be deprecated.
-
 ### Setting up BigQuery audit logs export
 
 To set up the BigQuery log export do the following in a project that contains BigQuery:
