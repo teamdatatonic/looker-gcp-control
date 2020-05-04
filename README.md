@@ -53,6 +53,10 @@ The BigQuery audit log export should now be set up. The table will be updated th
 
 If you have more than one project using BigQuery, repeat the steps above. All logs from different projects will be added to the same table, allowing easy querying across projects.
 
+### !IMPORTANT!
+The BigQuery Audit Logs export pulls in both the AuditData and BigQueryAuditMetadata logs. AuditData is the older version of the logs, and BigQueryAuditMetadata is the new which ADDS new columns. These are therefore unioned in the table. The lookml model pulls from the older version, but you have the ability to model the new columns into the model should you wish. 
+Please note, this means you should ONLY USE ROW COUNT with filters, be aware a simple count(*) will not yield number of queries without a filter applied.
+
 #### Using the Google Cloud SDK
 
 Alternatively, if you have the Google Cloud SDK installed, you can set up the BigQuery logging using the following command (make sure you in the project you want to set up the logging for by running ```gcloud config set project <project-name>```)
