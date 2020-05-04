@@ -4,9 +4,9 @@ view: bigquery_data_access {
       SELECT
         *
       FROM
-        `gcp_logs.cloudaudit_googleapis_com_data_access_*`
+        `auditv3.cloudaudit_googleapis_com_data_access`
       WHERE
-        {% condition date_filter %} PARSE_TIMESTAMP('%E4Y%m%d', _TABLE_SUFFIX) {% endcondition %} ;;
+        {% condition date_filter %} timestamp {% endcondition %} ;;
   }
 
   filter: date_filter {
@@ -69,6 +69,7 @@ view: bigquery_data_access {
     sql: ${TABLE}.sourceLocation ;;
   }
 
+# this is the new partition fields
   dimension_group: timestamp {
     hidden: yes
     type: time
