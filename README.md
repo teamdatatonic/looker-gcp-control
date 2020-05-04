@@ -55,7 +55,7 @@ If you have more than one project using BigQuery, repeat the steps above. All lo
 
 ### !IMPORTANT!
 The BigQuery Audit Logs export pulls in both the AuditData and BigQueryAuditMetadata logs. AuditData is the older version of the logs, and BigQueryAuditMetadata is the new which ADDS new columns. These are therefore unioned in the table. The lookml model pulls from the older version, but you have the ability to model the new columns into the model should you wish. 
-Please note, this means you should ONLY USE ROW COUNT with filters, be aware a simple count(*) will not yield number of queries without a filter applied.
+You should only use ROW COUNT with Method Name filter applied.
 
 #### Using the Google Cloud SDK
 
