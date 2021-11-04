@@ -505,12 +505,12 @@ view: bigquery_data_access_job_statistics {
 
   dimension: billed_gigabytes {
     type: number
-    sql: 1.0*${billed_bytes}/1000000000 ;;
+    sql: 1.0*${billed_bytes}/1073741824 ;;
   }
 
   dimension: billed_terabytes {
     type: number
-    sql: 1.0*${billed_bytes}/1000000000000 ;;
+    sql: 1.0*${billed_bytes}/1099511627776 ;;
   }
 
   measure: total_billed_gigabytes {
@@ -579,7 +579,7 @@ view: bigquery_data_access_job_statistics {
 
   dimension: query_cost {
     type: number
-    sql: 5.0*${billed_bytes}/1000000000000 ;;
+    sql: 5.0*${billed_bytes}/1099511627776 ;;
     value_format_name: usd
   }
 
