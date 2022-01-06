@@ -67,6 +67,8 @@ view: gcp_billing_export {
             <a href="{{ link }}"> ${{ rendered_value }}</a>
           {% when 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
+          {% when 'JPY' %}
+            <a href="{{ link }}"> ¥{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
           {% endcase %} ;;
@@ -90,6 +92,8 @@ view: gcp_billing_export {
             <a href="{{ link }}"> ${{ rendered_value }}</a>
           {% when 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
+          {% when 'JPY' %}
+            <a href="{{ link }}"> ¥{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
           {% endcase %} ;;
