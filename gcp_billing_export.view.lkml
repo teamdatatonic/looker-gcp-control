@@ -62,9 +62,9 @@ view: gcp_billing_export {
     value_format_name: decimal_2
     html: {% if currency._value == 'GBP' %}
             <a href="{{ link }}"> £{{ rendered_value }}</a>
-          {% elsif currency == 'USD' %}
+          {% elsif currency._value == 'USD' %}
             <a href="{{ link }}"> ${{ rendered_value }}</a>
-          {% elsif currency == 'EUR' %}
+          {% elsif currency._value == 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
@@ -84,9 +84,9 @@ view: gcp_billing_export {
     value_format_name: decimal_2
     html: {% if currency._value == 'GBP' %}
             <a href="{{ link }}"> £{{ rendered_value }}</a>
-          {% elsif currency == 'USD' %}
+          {% elsif currency._value == 'USD' %}
             <a href="{{ link }}"> ${{ rendered_value }}</a>
-          {% elsif currency == 'EUR' %}
+          {% elsif currency._value == 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
