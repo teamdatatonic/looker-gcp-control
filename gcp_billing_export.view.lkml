@@ -60,15 +60,16 @@ view: gcp_billing_export {
     type: sum
     sql: ${TABLE}.cost ;;
     value_format_name: decimal_2
-    html: {% if currency._value == 'GBP' %}
+    html: {% case currency._value %}
+          {% when 'GBP' %}
             <a href="{{ link }}"> £{{ rendered_value }}</a>
-          {% elsif currency._value == 'USD' %}
+          {% when 'USD' %}
             <a href="{{ link }}"> ${{ rendered_value }}</a>
-          {% elsif currency._value == 'EUR' %}
+          {% when 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
-          {% endif %} ;;
+          {% endcase %} ;;
     drill_fields: [gcp_billing_export_project.name, gcp_billing_export_service.description, sku_category, gcp_billing_export_sku.description, gcp_billing_export_usage.unit, gcp_billing_export_usage.total_usage, total_cost]
   }
 
@@ -82,15 +83,16 @@ view: gcp_billing_export {
     type: sum
     sql: ${gcp_billing_export_credits.credit_amount} ;;
     value_format_name: decimal_2
-    html: {% if currency._value == 'GBP' %}
+    html: {% case currency._value %}
+          {% when 'GBP' %}
             <a href="{{ link }}"> £{{ rendered_value }}</a>
-          {% elsif currency._value == 'USD' %}
+          {% when 'USD' %}
             <a href="{{ link }}"> ${{ rendered_value }}</a>
-          {% elsif currency._value == 'EUR' %}
+          {% when 'EUR' %}
             <a href="{{ link }}"> €{{ rendered_value }}</a>
           {% else %}
             <a href="{{ link }}"> {{ rendered_value }} {{ currency._value }}</a>
-          {% endif %} ;;
+          {% endcase %} ;;
     drill_fields: [gcp_billing_export_credits.credit_name,gcp_billing_export_credits.credit_amount]
   }
 
